@@ -1,0 +1,7 @@
+php-hyphen for Debian
+--------------------------
+
+This extension has been created with dh-make-pecl which is part
+of dh-make-php.
+
+ -- gkaroly@midian.hu, Thu, 05 Jun 2008 12:39:27 +0000
