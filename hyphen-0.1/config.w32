@@ -1,0 +1,13 @@
+// $Id$
+// vim:ft=javascript
+
+// If your extension references something external, use ARG_WITH
+// ARG_WITH("hyphen", "for hyphen support", "no");
+
+// Otherwise, use ARG_ENABLE
+// ARG_ENABLE("hyphen", "enable hyphen support", "no");
+
+if (PHP_HNJ != "no") {
+  EXTENSION("hyphen", "hyphen.c");
+}
+

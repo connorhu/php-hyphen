@@ -1,0 +1,14 @@
+Source: php-hyphen
+Section: web
+Priority: optional
+Maintainer: gkaroly@midian.hu
+Build-Depends: debhelper (>= 5), po-debconf, xsltproc , php5-dev, libhyphen-dev (>= 2.4)
+Standards-Version: 3.7.2
+
+Package: php5-hyphen
+Architecture: any
+Depends: ${shlibs:Depends}, ${php:Depends}, ${misc:Depends}
+Description: hyphenation module for PHP 5
+ PHP Bindings for the libhyphen hyphenation library.
+ .
+ Bindings for the libhyphen hyphenation library.
