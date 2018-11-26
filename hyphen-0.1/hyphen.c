@@ -102,27 +102,13 @@ PHP_MINFO_FUNCTION(hyphen)
 Open a hyphen dictionary */
 PHP_FUNCTION(hyphen_open)
 {
-    zval *zfilename;
     char *filename = NULL;
-    int filename_length;
+    size_t filename_length;
     hyphen_rsrc *rsrc_int;
 
-    if (ZEND_NUM_ARGS() != 1) {
-        WRONG_PARAM_COUNT;
-    }
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "z", &zfilename) == FAILURE) {
-        RETURN_NULL();
-    }
-
-    switch (Z_TYPE_P(zfilename)) {
-        case IS_STRING:
-            filename = Z_STRVAL_P(zfilename);
-            filename_length = Z_STRLEN_P(zfilename);
-            break;
-        default:
-            RETURN_FALSE;
-            break;
-    }
+    ZEND_PARSE_PARAMETERS_START(1, 1)
+        Z_PARAM_STRING(filename, filename_length)
+    ZEND_PARSE_PARAMETERS_END();
 
     if (filename_length == 0) {
         php_error_docref(NULL TSRMLS_CC, E_WARNING, "Empty string as dict");
@@ -156,9 +142,8 @@ PHP_FUNCTION(hyphen_word)
 {
     zend_string *zend_hyphenated_word;
     zval *hyphen;
-    zval *word;
     char *word_string;
-    int word_length;
+    size_t word_length;
     
     hyphen_rsrc *hyphen_resource;
     char *hyphenated_word, *hyphens;
@@ -168,21 +153,16 @@ PHP_FUNCTION(hyphen_word)
     int i, hyph_count;
     char *retval;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &hyphen, &word) == FAILURE) {
-        return;
-    }
+    ZEND_PARSE_PARAMETERS_START(2, 2)
+        Z_PARAM_RESOURCE(hyphen)
+        Z_PARAM_STRING(word_string, word_length)
+    ZEND_PARSE_PARAMETERS_END();
 
     if ((hyphen_resource = (hyphen_rsrc *)zend_fetch_resource(Z_RES_P(hyphen), HYPHEN_RES_NAME, hyphen_res_counter)) == NULL) { 
         RETURN_FALSE; 
     }
-    
-    if (Z_TYPE_P(word) != IS_STRING) {
-        RETURN_FALSE;
-    }
 
     if (hyphen_resource->dict != NULL) {
-        word_length = Z_STRLEN_P(word);
-
         // hyp hyp hurray
         hyphens = (char *) emalloc(word_length + 5);
         hyphenated_word = (char *) emalloc(word_length * 2);
@@ -192,9 +172,7 @@ PHP_FUNCTION(hyphen_word)
         //         const char *word, int word_size, char * hyphens,
         //         char *hyphenated_word, char *** rep, int ** pos, int ** cut);
 
-        const char *world_to_hyphenate = Z_STRVAL_P(word);
-
-        hnj_hyphen_hyphenate2(hyphen_resource->dict, world_to_hyphenate, word_length, hyphens, hyphenated_word, &replacements, &pos, &cut);
+        hnj_hyphen_hyphenate2(hyphen_resource->dict, (const char *) word_string, word_length, hyphens, hyphenated_word, &replacements, &pos, &cut);
     
         zend_hyphenated_word = zend_string_init(hyphenated_word, strlen(hyphenated_word), 0);
         
@@ -217,9 +195,9 @@ PHP_FUNCTION(hyphen_close)
 
     hyphen_rsrc *hyphen_resource = NULL;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &hyphen) == FAILURE) {
-        return;
-    }
+    ZEND_PARSE_PARAMETERS_START(1, 1)
+        Z_PARAM_RESOURCE(hyphen)
+    ZEND_PARSE_PARAMETERS_END();
 
     if ((hyphen_resource = (hyphen_rsrc *)zend_fetch_resource(Z_RES_P(hyphen), HYPHEN_RES_NAME, hyphen_res_counter)) == NULL) { 
         RETURN_FALSE; 
