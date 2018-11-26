@@ -1,3 +1,9 @@
+php-hyphen (0.1-2) unstable; urgency=low
+
+  * Updated deb package
+
+ -- Karoly Gossler <connor@connor.hu>  Fri, 23 Nov 2018 09:34:30 +0200
+
 php-hyphen (0.1-1) hardy; urgency=low
 
   * Initial Release.
